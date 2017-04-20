@@ -9,7 +9,6 @@ DataFrame object.
 
 import os, xml.etree.ElementTree as eTree, pandas as pd
 
-file_results = r'C:\Users\LENOVO\Desktop\Academic\horseracing\Data\xml\results'
 
 def xml_transform_results(directory):
     os.chdir(directory)
@@ -43,7 +42,7 @@ def root_data_results(root):
                 result_dict.update({'race_date': date})                
                 result_dict.update({'track': track, 'race': race})
                 result_dict.update({'horse_name': result[0], 
-                                    'result': result[1],
+                                    'results': result[1],
                                     'speed_rating': result[2]})
                 root_data_repo.append(result_dict)
     

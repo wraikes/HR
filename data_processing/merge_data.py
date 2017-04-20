@@ -7,36 +7,21 @@ Merge the processed pp and results DataFrames.
 '''
 
 import os
+os.chdir('/home/wraikes/Programming/Personal_Projects/HorseRacing/Code/')
 
+from data_processing.pp_process import *
+from data_processing.results_process import *
 
-import data_processing.pp_process, data_processing.results_process
+file_pp = '/home/wraikes/Programming/Personal_Projects/HorseRacing/Data/xml/pp'
+pp = xml_transform_pp(file_pp)
 
+file_results = '/home/wraikes/Programming/Personal_Projects/HorseRacing/Data/xml/results'
+results = xml_transform_results(file_results)
 
-test = "nyc    10\nnyc    20"
+hr_df = pp.merge(results, how = 'left', on = ['horse_name', 'race_date', 'race', 'track'])
+hr_df.to_csv('/home/wraikes/Programming/Personal_Projects/HorseRacing/Data/data_files/HR_DF.csv')
 
-
-salesMax = 0
-oldKey = None
-
-for line in test:
-    data_mapped = line.strip().split('\t')
-    
-    thisKey, thisSale = data_mapped
-    
-    if oldKey and oldKey != thisKey:
-        print oldKey, '\t', salesMax
-        salesMax = 0
-    
-    oldKey = thisKey
-    
-    if thisSale > salesMax:
-        salesMax = thisSale
-    
-if oldKey != None:
-    print oldKey, '\t', salesMax
-
-
-
+del pp, results
 
 
 

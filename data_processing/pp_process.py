@@ -9,8 +9,6 @@ DataFrame object.
 
 import os, xml.etree.ElementTree as eTree, pandas as pd
 
-file_pp = r'C:\Users\LENOVO\Desktop\Academic\horseracing\Data\xml\pp'
-
 def xml_transform_pp(directory):
     os.chdir(directory)
     races_for_df = []
