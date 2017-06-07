@@ -3,6 +3,7 @@ import os, pandas as pd, numpy as np, matplotlib.pyplot as plt
 #remove when ready
 #os.chdir('/home/wraikes/Programming/Personal_Projects/HorseRacing/Data/data_files')
 #hr_df = pd.read_csv("HR_DF.csv")
+#hr_df = hr_df[hr_df['results'].notnull()]
 
 
 ################################ Distance Conversion
@@ -72,10 +73,15 @@ def new_features(df):
 
     #Recode "Others"
     courses = ['D', 'E', 'T']
-    df['course_id'] = np.where(df['course_id'].isin(courses), df['course_id'], 'Other')
+    df['course_id'] = np.where(df['course_id'].isin(courses), 
+                               df['course_id'], 'Other')
 
     sex = ['C', 'F', 'G', 'M']
     df['sex'] = np.where(df['sex'].isin(sex), df['sex'], 'Other')
+
+    pp_1_raceclass = ['CL', 'MC', "MS", 'AL', 'OC', 'ST', 'SA', 'SO']
+    df['PP_1_raceclass'] = np.where(df['PP_1_raceclass'].isin(pp_1_raceclass), 
+                                    df['PP_1_raceclass'], 'Other')
 
     #Create CV column
     df['cv'] = df.groupby(['race_date', 'track', 'race']).grouper.group_info[0]
@@ -101,13 +107,13 @@ def new_features(df):
 def remove_na_col(df):
     results = df.results
     speed_rating = df.speed_rating
+    dollar_odds = df.dollar_odds
     new_index = 1 - df.count() / df.shape[0] < .15
     df = df.iloc[:, new_index.values]
     df['results'] = results
     df['speed_rating'] = speed_rating
+    df['dollar_odds'] = dollar_odds
     return df
-
-
-
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                
 
 

@@ -41,9 +41,10 @@ def root_data_results(root):
                 result_dict = {}
                 result_dict.update({'race_date': date})                
                 result_dict.update({'track': track, 'race': race})
-                result_dict.update({'horse_name': result[0], 
-                                    'results': result[1],
-                                    'speed_rating': result[2]})
+                result_dict.update({'horse_name': result[0],
+                                    'dollar_odds': result[1],
+                                    'results': result[2],
+                                    'speed_rating': result[3]})
                 root_data_repo.append(result_dict)
     
     return root_data_repo
@@ -59,6 +60,9 @@ def race_data(parent):
                 
                 if grandchild.tag == 'NAME':
                     results.append(grandchild.text.upper())
+                    
+                elif grandchild.tag == 'DOLLAR_ODDS':
+                    results.append(grandchild.text)
                     
                 elif grandchild.tag == 'OFFICIAL_FIN':
                     results.append(grandchild.text)
