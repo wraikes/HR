@@ -62,6 +62,7 @@ def new_features(df):
     df['win'] = np.where(df['results'] == 1, 1, 0)
 
     #morning odds
+    df = df[df.morn_odds.str.contains('/')]
     morning_odds = df.morn_odds.str.split('/', expand = True)
     df['mo_1'] = morning_odds.iloc[:, 0].astype(int)
     df['mo_2'] = morning_odds.iloc[:, 1].astype(int)

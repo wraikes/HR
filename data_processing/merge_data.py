@@ -30,6 +30,9 @@ hr_df = col_drop(hr_df)
 hr_df = new_features(hr_df)
 hr_df = remove_na_col(hr_df)
 
+
+
+
 hr_df.to_csv('/home/wraikes/Programming/Personal_Projects/HorseRacing/Data/data_files/HR_DF.csv')
 
 
