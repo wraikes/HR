@@ -1,4 +1,6 @@
 import os, pandas as pd, numpy as np, matplotlib.pyplot as plt
+from sklearn.preprocessing import Imputer
+
 
 #remove when ready
 #os.chdir('/home/wraikes/Programming/Personal_Projects/HorseRacing/Data/data_files')
@@ -87,6 +89,9 @@ def new_features(df):
     #Create CV column
     df['cv'] = df.groupby(['race_date', 'track', 'race']).grouper.group_info[0]
 
+    #Remove horse_name and track, unneeded columns for analysis.
+    df.drop(['horse_name', 'track'], axis = 1, inplace = True)
+    
     return df
     
 ################################### Remove features with many NaNs
@@ -105,16 +110,35 @@ def new_features(df):
 
 #Chose 0.15 with thought of filling in NaNs
 
-def remove_na_col(df):
-    results = df.results
-    speed_rating = df.speed_rating
-    dollar_odds = df.dollar_odds
-    new_index = 1 - df.count() / df.shape[0] < .15
+def remove_na(df, cutoff = 0.15):
+    '''Removes rows with NaN as 'result'. Also removes columns that meet less
+    than the cutoff rate.
+    '''
+    df = df[df['results'].notnull()]
+    
+    new_index = 1 - (df.count() / df.shape[0]) < cutoff
     df = df.iloc[:, new_index.values]
-    df['results'] = results
-    df['speed_rating'] = speed_rating
-    df['dollar_odds'] = dollar_odds
     return df
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                
+                                        
+                                        
+def imputer(df, method = 'mean'):
+    imputer = Imputer(strategy = method)
 
+    for col in df.columns:
+        if df[col].dtype == 'float64':
+            df[col] = imputer.fit_transform(df[col].reshape(-1, 1))
 
+def create_dummies(df):
+    cols_object = [x for x in df.columns if df[x].dtype == 'O']
+    return pd.get_dummies(df, dummy_na = True, columns=cols_object)                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        
+
+def data_clean(df):
+    
+    new_df = dist_change(df)
+    new_df = col_drop(df)
+    new_df = new_features(df)
+    new_df = remove_na(df)
+    new_df = imputer(df)
+    new_df = create_dummies(df)
+    
+    return new_df
